@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Advisor Matching</title>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title> Pre Major Matching</title>
+<link rel="stylesheet" href="index.css" />
+    <script defer src="main.js"></script>
+</head>
+<body>
+
+<div class="header">
+  <h1>Whitman College</h1>
+  <p>First year <b>Advisor</b> Matching</p>
+</div>
+
+<div class="row">
+  <div class="side" >
+    <div class="a">
+      <h2>Student file</h2>
+      <input id="Student" type="file" accept = ".csv">
+      <h2>Advisor file</h2>
+      <input id="Advisor" type="file" accept = ".csv">
+    </div>
+  </div>
+  <div class="side">
+    <div class="a">
+      <h2>Specify Weights</h2>
+      <form>
+        <label for="national">Nationality weight:</label><br>
+        <input type="text" id="national" name="national" value="20"><br>
+        <label for="help">Advisor Help:</label><br>
+        <input type="text" id="help" name="help" value="5"><br>
+        <label for="department">Department:</label><br>
+        <input type="text" id="department" name="department" value="10">
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  function calculateMatch() {
+//    Get the advisor and student files
+    var advisor = document.getElementById("Advisor").files[0].path;
+    var student = document.getElementById("Student").files[0].path;
+    
+//    Get the scorer weights
+    var national = document.getElementById("national").value;
+    var help = document.getElementById("help").value;
+    var department = document.getElementById("department").value;
+    var input_weights = [help, national, department];
+    
+    
+    var scorer = require('./scorer.js');
+    scorer = new scorer(advisor, student, input_weights);
+    scorer.fill_advisor_array();
+    scorer.fill_student_array();
+    scorer.calculate_score();
+    scorer.calculate_results();
+    var results = scorer.get_results();
+    var string_results = "";
+    results.forEach(function(v) { string_results += v.join(', ') + '\n'; });
+    
+    var file = new Blob([string_results], {type: ".csv"});
+    if (window.navigator.msSaveOrOpenBlob) // IE10+
+        window.navigator.msSaveOrOpenBlob(file, "results.csv");
+    else { // Others
+        var a = document.createElement("a"),
+                url = URL.createObjectURL(file);
+        a.href = url;
+        a.download = "results.csv";
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function() {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);  
+        }, 0); 
+    }
+  }
+</script>
+    
+<div class="footer">
+  <input type="button" value="Calculate Match" onclick="calculateMatch();"/>
+</div>
+
+</body>
+</html>
