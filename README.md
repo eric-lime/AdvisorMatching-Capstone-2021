@@ -1,0 +1,2 @@
+# AdvisorMatching-Capstone-2021
+Capstone project from my senior year of college. We were assigned to come up with a web-application where the user could insert two .csv files that contains a list of all the advisors and another for all students. We created surveys to grab preferences of advisors and students for their matches and matched them through the implementation of the Hungarian Algorithm. 
