@@ -14,14 +14,4 @@ cd electron-quick-start
 npm install
 npm start
 ```
-## Run
-
-```
-npm start
-```
-## clone the repository:
-```
-https://github.com/WhitmanCSCapstone/AdvisorMatching.git
-```
-## Algorithm
 
